@@ -6,7 +6,8 @@ const bcrypt = require("bcrypt");
 exports.signup = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-
+        console.log("name:",name);
+        
         //check existing email
         const exist = await User.findOne({ email });
         if (exist) return res.status(400).json({ message: "Email already exists" });
@@ -35,7 +36,7 @@ exports.login = async (req, res) => {
         if(!decode) return res.status(401).json({message:"Incorrect Password"})
         
         const token = jwt.sign({id: user._id},process.env.JWT_SECRET,{expiresIn:'7d'})
-        res.json({token});
+        res.json({token, user});
     } catch (error) {
         res.status(500).json({message:error.message})
     }

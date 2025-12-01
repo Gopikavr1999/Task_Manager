@@ -1,4 +1,5 @@
 require("dotenv").config();
+const cors = require('cors');
 const connectDB = require("./src/config/db.js")
 const express = require("express");
 
@@ -9,6 +10,10 @@ const { auth } = require("./src/middleware/auth.js");
 
 const app = express();
 
+app.use(cors({
+    orgin:'http://localhost:5173',
+    credential: true,
+}))
 app.use(express.json());
 
 //User Routes
