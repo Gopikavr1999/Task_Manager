@@ -42,6 +42,14 @@ const Register = () => {
         <button className="w-full py-2 bg-blue-600 text-white rounded">
           {loading ? "Creating.." : "Create Account"}
         </button>
+        {/* Create Account Link */}
+        <div className="text-center text-sm text-gray-600 mt-3">
+          Already have an account?{" "}
+          <a href="/login" className="text-blue-600 hover:underline">
+            Login
+          </a>
+        </div>
+
       </form>
     </div>
   )

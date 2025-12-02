@@ -35,7 +35,14 @@ export const AuthProvider = ({children}:{children:React.ReactNode}) => {
         setToken(token);
         setUser(user);
         
-        navigate("/dashboard");
+         // ROLE BASED REDIRECTION
+         if(user.role === "admin"){
+            navigate("/admin-dashboard");
+         } else if(user.role === "employee"){
+            navigate("/dashboard");
+         } else{
+            navigate("/login"); // fallback for invalid role
+         }
     }
 
     const logout = () => {

@@ -17,7 +17,8 @@ exports.signup = async (req, res) => {
         const newUser = await User.create({
             name,
             email,
-            password: hashed
+            password: hashed,
+            role: "employee"
         })
 
         return res.status(201).json({ message: "User created", user: newUser })
@@ -37,6 +38,23 @@ exports.login = async (req, res) => {
         
         const token = jwt.sign({id: user._id},process.env.JWT_SECRET,{expiresIn:'7d'})
         res.json({token, user});
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+}
+
+exports.updateRole = async (req, res) => {
+    try {
+        const { role } = req.body; // "admin" or "employee"
+        const userId = req.params.id;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {role},
+            {new: true}
+        );
+
+        res.json({message: "Role updated", user: updatedUser});
     } catch (error) {
         res.status(500).json({message:error.message})
     }
