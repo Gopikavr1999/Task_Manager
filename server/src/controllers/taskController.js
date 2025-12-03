@@ -34,7 +34,8 @@ exports.getTasks = async (req, res) => {
         if (sortBy) sortOptions[sortBy] = order;
 
         const tasks = await Task.find(filter).sort(sortOptions).skip((page - 1) * limit).limit(limit);
-
+        console.log("tasks",tasks);
+        
         const total = await Task.countDocuments(filter);
 
         res.json({ success: true, page, totalPages: Math.ceil(total / limit), totalTasks: total, tasks });

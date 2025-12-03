@@ -5,12 +5,15 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './routes/ProtectedRoute';
 import AdminRoute from './routes/AdminRoute';
-import AdminDashboard from './pages/AdminDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import { useAuth } from './contexts/AuthContext';
+import UsersPage from './pages/admin/UsersPage';
+import TasksPage from './pages/admin/TasksPage';
 function App() {
-
+  const {token} = useAuth();
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/" element={<Navigate to={token ? "/dashboard" : "/login"} replace />} />
       <Route path='/register' element={<Register/>} />
       <Route path='/login' element={<Login/>} />
 
@@ -30,6 +33,22 @@ function App() {
         element={
           <AdminRoute>
             <AdminDashboard />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <AdminRoute>
+            <UsersPage />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/tasks"
+        element={
+          <AdminRoute>
+            <TasksPage />
           </AdminRoute>
         }
       />

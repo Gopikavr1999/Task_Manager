@@ -43,6 +43,17 @@ exports.login = async (req, res) => {
     }
 }
 
+exports.getUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        console.log("users:", users);
+        
+        res.json({message: "Fetched all users", users: users});
+    } catch (error) {
+        res.status(500).json({message:error.message})
+    }
+}
+
 exports.updateRole = async (req, res) => {
     try {
         const { role } = req.body; // "admin" or "employee"

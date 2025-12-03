@@ -1,5 +1,5 @@
-import AdminSidebar from "../components/admin/AdminSidebar";
-import AdminTopbar from "../components/admin/AdminTopbar";
+import AdminSidebar from "../../components/admin/AdminSidebar";
+import AdminTopbar from "../../components/admin/AdminTopbar";
 
 const AdminDashboard = () => {
     return (

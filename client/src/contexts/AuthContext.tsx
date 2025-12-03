@@ -5,44 +5,44 @@ import { useNavigate } from "react-router-dom";
 interface AuthContextType {
     user: User | null;
     token: string | null;
-    login:(token:string, user: User) => void;
-    logout:() => void;
+    loadingAuth: boolean;
+    login: (token: string, user: User) => void;
+    logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({children}:{children:React.ReactNode}) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
+    const [loadingAuth, setLoadingAuth] = useState(true);
 
-    console.log("user",user);
-    
+    console.log("user", user);
+
     useEffect(() => {
         const savedToken = localStorage.getItem("token");
         const savedUser = localStorage.getItem("user");
 
-        if(savedToken && savedUser){
+        if (savedToken && savedUser) {
             setToken(savedToken);
             setUser(JSON.parse(savedUser));
         }
-    },[]);
 
-    const login = (token: string, user: User) =>{
-        localStorage.setItem("token",token);
+        // small delay to ensure Router + Provider sync
+        setTimeout(() => setLoadingAuth(false), 100);
+    }, []);
+
+    const login = (token: string, user: User) => {
+        localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
 
         setToken(token);
         setUser(user);
-        
-         // ROLE BASED REDIRECTION
-         if(user.role === "admin"){
-            navigate("/admin-dashboard");
-         } else if(user.role === "employee"){
-            navigate("/dashboard");
-         } else{
-            navigate("/login"); // fallback for invalid role
-         }
+
+        // Role redirect
+        if (user.role === "admin") navigate("/admin-dashboard");
+        else navigate("/dashboard");
     }
 
     const logout = () => {
@@ -54,8 +54,8 @@ export const AuthProvider = ({children}:{children:React.ReactNode}) => {
 
         navigate("/login")
     }
-    return(
-        <AuthContext.Provider value={{user, token, login, logout}}>
+    return (
+        <AuthContext.Provider value={{ user, token, loadingAuth, login, logout }}>
             {children}
         </AuthContext.Provider>
     )
@@ -63,6 +63,6 @@ export const AuthProvider = ({children}:{children:React.ReactNode}) => {
 
 export const useAuth = () => {
     const ctx = useContext(AuthContext);
-    if(!ctx) throw new Error("useAuth must be inside AuthProvider");
+    if (!ctx) throw new Error("useAuth must be inside AuthProvider");
     return ctx;
 }
