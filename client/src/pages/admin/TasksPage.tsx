@@ -7,7 +7,7 @@ const TasksPage = () => {
     const fetchTasks = async() => {
         
         const token = localStorage.getItem("token");
-        const res = await API.get("/api/task?limmit=0",{
+        const res = await API.get("/api/task?limmit=10",{
             headers: {Authorization:`Bearer ${token}`}
         });
         console.log("task fetch");

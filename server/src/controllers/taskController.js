@@ -25,13 +25,15 @@ exports.getTasks = async (req, res) => {
         limit = Number(limit);
         order = order === "desc" ? -1 : 1;
 
-        const filter = { createdBy: req.user.id };
+        const filter = {  };
+        // const filter = { createdBy: req.user.id };
 
         if (status) filter.status = status;
         if (priority) filter.priority = priority;
 
         const sortOptions = {};
         if (sortBy) sortOptions[sortBy] = order;
+        console.log("filter",filter);
 
         const tasks = await Task.find(filter).sort(sortOptions).skip((page - 1) * limit).limit(limit);
         console.log("tasks",tasks);
